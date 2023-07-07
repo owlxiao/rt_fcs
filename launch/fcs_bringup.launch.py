@@ -49,7 +49,7 @@ def generate_launch_description():
         )
     ]
 
-    def get_camera_node(package, plugin):
+    def get_camera_node(package, plugin, name):
         package_dir = get_package_share_directory('ros2_astra_camera')
         parameters_path = os.path.join(
             package_dir, 'launch', 'params', 'astra_pro.yaml')
@@ -57,7 +57,7 @@ def generate_launch_description():
         return ComposableNode(
             package=package,
             plugin=plugin,
-            name='camera_node',
+            name=name,
             parameters=[parameters_path],
 
         )
@@ -89,10 +89,10 @@ def generate_launch_description():
         )
     # FIXME
     uvc_camera_node = get_camera_node(
-        'ros2_astra_camera', 'ros2_astra_camera::CameraDriver')
+        'ros2_astra_camera', 'ros2_astra_camera::CameraDriver', 'uvc_camera_node')
 
     astra_camera_node = get_camera_node(
-        'ros2_astra_camera', 'ros2_astra_camera::AstraDriver')
+        'ros2_astra_camera', 'ros2_astra_camera::AstraDriver', 'astra_camera_node')
 
     cam_detector = get_camera_detector_container(
         [astra_camera_node, uvc_camera_node])
