@@ -62,14 +62,13 @@ def generate_launch_description():
 
         )
 
-    def get_camera_detector_container(camera_node):
+    def get_camera_detector_container(camera_nodes):
         return ComposableNodeContainer(
             name='camera_detector_container',
             namespace='',
             package='rclcpp_components',
             executable='component_container',
-            composable_node_descriptions=[
-                camera_node,
+            composable_node_descriptions=camera_nodes + [
                 ComposableNode(
                     package='detector',
                     plugin='rt_vision::DetectorNode',
@@ -88,11 +87,15 @@ def generate_launch_description():
             emulate_tty=True,
             on_exit=Shutdown(),
         )
-
-    astra_camera_node = get_camera_node(
+    # FIXME
+    uvc_camera_node = get_camera_node(
         'ros2_astra_camera', 'ros2_astra_camera::CameraDriver')
 
-    cam_detector = get_camera_detector_container(astra_camera_node)
+    astra_camera_node = get_camera_node(
+        'ros2_astra_camera', 'ros2_astra_camera::AstraDriver')
+
+    cam_detector = get_camera_detector_container(
+        [astra_camera_node, uvc_camera_node])
 
     return LaunchDescription(
         launch_args + [
