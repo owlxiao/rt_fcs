@@ -41,6 +41,12 @@ def generate_launch_description():
             default_value="/detector/objects",
             description="topic name for publishing objects"
         ),
+
+        DeclareLaunchArgument(
+            "class_labels_path",
+            default_value="./install/detector/share/detector/labels/names.txt",
+            description="path to class labels"
+        )
     ]
 
     def get_camera_node(package, plugin):
@@ -74,6 +80,7 @@ def generate_launch_description():
                         "num_classes": LaunchConfiguration("num_classes"),
                         "subscribe_image_topic_name": LaunchConfiguration("subscribe_image_topic_name"),
                         "publish_objects_topic_name": LaunchConfiguration("publish_objects_topic_name"),
+                        "class_labels_path": LaunchConfiguration("class_labels_path"),
                     }],
                 )
             ],
