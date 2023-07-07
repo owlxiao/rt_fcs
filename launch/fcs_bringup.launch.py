@@ -10,6 +10,39 @@ from launch.substitutions import LaunchConfiguration
 
 
 def generate_launch_description():
+    launch_args = [
+        DeclareLaunchArgument(
+            "is_preview",
+            default_value="true",
+            description=""
+        ),
+
+        DeclareLaunchArgument(
+            "num_classes",
+            default_value="1",
+            description="num classes"
+        ),
+
+        DeclareLaunchArgument(
+            "engine_file_path",
+            # FIXME
+            default_value="/path/to/engine_file",
+            description="engine file path"
+        ),
+
+        DeclareLaunchArgument(
+            "subscribe_image_topic_name",
+            default_value="/camera/color/image_raw",
+            description="topic name for source image"
+        ),
+
+        DeclareLaunchArgument(
+            "publish_objects_topic_name",
+            default_value="/detector/objects",
+            description="topic name for publishing objects"
+        ),
+    ]
+
     def get_camera_node(package, plugin):
         package_dir = get_package_share_directory('ros2_astra_camera')
         parameters_path = os.path.join(
@@ -35,6 +68,13 @@ def generate_launch_description():
                     package='detector',
                     plugin='rt_vision::DetectorNode',
                     name='detector',
+                    parameters=[{
+                        "is_preview": LaunchConfiguration("is_preview"),
+                        "engine_file_path": LaunchConfiguration("engine_file_path"),
+                        "num_classes": LaunchConfiguration("num_classes"),
+                        "subscribe_image_topic_name": LaunchConfiguration("subscribe_image_topic_name"),
+                        "publish_objects_topic_name": LaunchConfiguration("publish_objects_topic_name"),
+                    }],
                 )
             ],
             output='both',
@@ -47,6 +87,7 @@ def generate_launch_description():
 
     cam_detector = get_camera_detector_container(astra_camera_node)
 
-    return LaunchDescription([
-        cam_detector
-    ])
+    return LaunchDescription(
+        launch_args + [
+            cam_detector
+        ])
