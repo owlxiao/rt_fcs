@@ -26,7 +26,7 @@ def generate_launch_description():
         DeclareLaunchArgument(
             "engine_file_path",
             # FIXME
-            default_value="/path/to/engine_file",
+            default_value="./install/detector/share/detector/model/model_trt.engine",
             description="engine file path"
         ),
 
