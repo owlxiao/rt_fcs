@@ -46,6 +46,18 @@ def generate_launch_description():
             "class_labels_path",
             default_value="./install/detector/share/detector/labels/names.txt",
             description="path to class labels"
+        ),
+
+        DeclareLaunchArgument(
+            "conf_bbox_thresh",
+            default_value="0.9",
+            description="bbox thresh"
+        ),
+
+        DeclareLaunchArgument(
+            "conf_nms_thresh",
+            default_value="0.45",
+            description="nms thresh"
         )
     ]
 
@@ -80,6 +92,8 @@ def generate_launch_description():
                         "subscribe_image_topic_name": LaunchConfiguration("subscribe_image_topic_name"),
                         "publish_objects_topic_name": LaunchConfiguration("publish_objects_topic_name"),
                         "class_labels_path": LaunchConfiguration("class_labels_path"),
+                        "conf_bbox_thresh": LaunchConfiguration("conf_bbox_thresh"),
+                        "conf_nms_thresh": LaunchConfiguration("conf_nms_thresh"),
                     }],
                 )
             ],
