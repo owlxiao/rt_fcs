@@ -37,6 +37,12 @@ def generate_launch_description():
         ),
 
         DeclareLaunchArgument(
+            "subscribe_camera_info_topic_name",
+            default_value="/camera/color/camera_info",
+            description="topic name for camera info"
+        ),
+
+        DeclareLaunchArgument(
             "publish_objects_topic_name",
             default_value="/detector/objects",
             description="topic name for publishing objects"
@@ -94,6 +100,7 @@ def generate_launch_description():
                         "class_labels_path": LaunchConfiguration("class_labels_path"),
                         "conf_bbox_thresh": LaunchConfiguration("conf_bbox_thresh"),
                         "conf_nms_thresh": LaunchConfiguration("conf_nms_thresh"),
+                        "subscribe_camera_info_topic_name": LaunchConfiguration("subscribe_camera_info_topic_name"),
                     }],
                 )
             ],
