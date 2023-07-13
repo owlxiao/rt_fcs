@@ -4,7 +4,7 @@ from launch import LaunchDescription
 from launch_ros.descriptions import ComposableNode
 from ament_index_python.packages import get_package_share_directory
 from launch_ros.actions import ComposableNodeContainer, Node
-from launch.actions import GroupAction, Shutdown
+from launch.actions import GroupAction, Shutdown, TimerAction
 from launch.actions import DeclareLaunchArgument
 from launch.substitutions import LaunchConfiguration, Command
 
@@ -149,9 +149,14 @@ def generate_launch_description():
                      'publish_frequency': 1000.0}]
     )
 
+    delay_fcs_node = TimerAction(
+        period=3.0,
+        actions=[fcs]
+    )
+
     return LaunchDescription(
         launch_args + [
             robot_state_publisher,
             micro_ros_agent,
-            fcs
+            delay_fcs_node
         ])
