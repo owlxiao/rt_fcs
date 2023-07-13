@@ -6,7 +6,7 @@ from ament_index_python.packages import get_package_share_directory
 from launch_ros.actions import ComposableNodeContainer, Node
 from launch.actions import GroupAction, Shutdown
 from launch.actions import DeclareLaunchArgument
-from launch.substitutions import LaunchConfiguration
+from launch.substitutions import LaunchConfiguration, Command
 
 
 def generate_launch_description():
@@ -136,8 +136,22 @@ def generate_launch_description():
         arguments=["serial", "--dev", "/dev/ttyACM0"]
     )
 
+    robot_description = Command(['xacro ', os.path.join(
+        get_package_share_directory('rt_gimbal_description'), 'urdf', 'rt_gimbal.urdf.xacro')])
+
+    robot_state_publisher = Node(
+        package='robot_state_publisher',
+        executable='robot_state_publisher',
+        name='robot_state_publisher',
+        output='screen',
+        emulate_tty=True,
+        parameters=[{'robot_description': robot_description,
+                     'publish_frequency': 1000.0}]
+    )
+
     return LaunchDescription(
         launch_args + [
+            robot_state_publisher,
             micro_ros_agent,
             fcs
         ])
