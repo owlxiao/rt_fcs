@@ -19,11 +19,11 @@ ament_auto_find_build_dependencies()
 ###########
 
 ament_auto_add_library(${PROJECT_NAME} SHARED
-  src/rt_fcs_tf2_node.cpp
+  src/FcsTf2Node.cpp
 )
 
-rclcpp_components_register_node(${PROJECT_NAME}
-  PLUGIN rt_fcs::RTTf2Node
+rclcpp_components_register_node(${PROJECT_NAME} 
+  PLUGIN rt_fcs::FcsTf2Node
   EXECUTABLE ${PROJECT_NAME}_node
 )
 

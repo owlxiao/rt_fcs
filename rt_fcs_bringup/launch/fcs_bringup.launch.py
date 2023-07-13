@@ -80,13 +80,20 @@ def generate_launch_description():
 
         )
 
-    def get_camera_detector_container(camera_nodes):
+    # FIXME: refactor
+    def get_fcs_container(camera_nodes):
         return ComposableNodeContainer(
-            name='camera_detector_container',
+            name='rt_fcs',
             namespace='',
             package='rclcpp_components',
             executable='component_container',
             composable_node_descriptions=camera_nodes + [
+                ComposableNode(
+                    package="rt_fcs_tf2",
+                    plugin="rt_fcs::FcsTf2Node",
+                    name="rt_fcs_tf2",
+                ),
+
                 ComposableNode(
                     package='detector',
                     plugin='rt_vision::DetectorNode',
@@ -115,7 +122,7 @@ def generate_launch_description():
     astra_camera_node = get_camera_node(
         'ros2_astra_camera', 'ros2_astra_camera::AstraDriver', 'astra_camera_node')
 
-    cam_detector = get_camera_detector_container(
+    fcs = get_fcs_container(
         [astra_camera_node, uvc_camera_node])
 
     micro_ros_agent = Node(
@@ -125,12 +132,12 @@ def generate_launch_description():
         output='both',
         emulate_tty=True,
         on_exit=Shutdown(),
-        # FIXME: use arguments file 
+        # FIXME: use arguments file
         arguments=["serial", "--dev", "/dev/ttyACM0"]
     )
 
     return LaunchDescription(
         launch_args + [
             micro_ros_agent,
-            cam_detector
+            fcs
         ])
