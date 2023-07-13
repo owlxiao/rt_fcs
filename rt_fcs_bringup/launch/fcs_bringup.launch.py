@@ -118,7 +118,19 @@ def generate_launch_description():
     cam_detector = get_camera_detector_container(
         [astra_camera_node, uvc_camera_node])
 
+    micro_ros_agent = Node(
+        package='micro_ros_agent',
+        executable='micro_ros_agent',
+        name='micro_ros_agent',
+        output='both',
+        emulate_tty=True,
+        on_exit=Shutdown(),
+        # FIXME: use arguments file 
+        arguments=["serial", "--dev", "/dev/ttyACM0"]
+    )
+
     return LaunchDescription(
         launch_args + [
+            micro_ros_agent,
             cam_detector
         ])
