@@ -22,7 +22,7 @@ FcsTf2Node::FcsTf2Node(const rclcpp::NodeOptions &options)
 
 void FcsTf2Node::gimbalInfoCallBack(const rt_interfaces::msg::GimbalInfo &msg) {
   geometry_msgs::msg::TransformStamped t;
-  double timestampOffset = 0.0;
+  double timestampOffset = 0.5;
 
   t.header.stamp =
       this->now() + rclcpp::Duration::from_seconds(timestampOffset);
